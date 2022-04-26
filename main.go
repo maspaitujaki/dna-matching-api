@@ -17,7 +17,11 @@ func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
 	initaliseHandlers(router)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9000" // Default port if not specified
+	}
+	log.Fatal(http.ListenAndServe(":"+port, router))
 
 }
 
