@@ -9,8 +9,6 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -35,10 +33,10 @@ func initaliseHandlers(router *mux.Router) {
 }
 
 func initDB() {
-	errEnv := godotenv.Load()
-	if errEnv != nil {
-		panic("Error loading .env file")
-	}
+	// errEnv := godotenv.Load()
+	// if errEnv != nil {
+	// 	panic("Error loading .env file")
+	// }
 	config :=
 		database.Config{
 			User:     os.Getenv("DB_USER"),
