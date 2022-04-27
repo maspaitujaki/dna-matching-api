@@ -42,6 +42,9 @@ func initaliseHandlers(router *mux.Router) {
 	router.HandleFunc("/penyakit/delete/{nama}", controllers.DeletePenyakitByNama).Methods("DELETE")
 
 	router.HandleFunc("/pemeriksaan/get", controllers.GetAllPemeriksaan).Methods("GET")
+	router.HandleFunc("/pemeriksaan/get/what", controllers.GetPemeriksaanByPenyakit).Methods("GET")
+	router.HandleFunc("/pemeriksaan/get/when", controllers.GetPemeriksaanByTanggal).Methods("GET")
+	router.HandleFunc("/pemeriksaan/get/whenwhat", controllers.GetPemeriksaanByPenyakitAndTanggal).Methods("GET")
 	router.HandleFunc("/pemeriksaan/create", controllers.CreatePemeriksaan).Methods("POST")
 }
 
