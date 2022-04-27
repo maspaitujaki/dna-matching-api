@@ -41,7 +41,7 @@ func CreatePemeriksaan(w http.ResponseWriter, r *http.Request) {
 	key := database.Connector.Where("nama = ?", pemeriksaan.Penyakit).First(&penyakit)
 
 	if key.Error != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	// // kalo ada lanjut ke bawah
