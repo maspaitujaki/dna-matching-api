@@ -3,9 +3,11 @@ package controllers
 import (
 	"dna-matching-api/database"
 	"dna-matching-api/entity"
+	"dna-matching-api/stringMatching"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 // GetAllPemeriksaan returns all pemeriksaan
@@ -25,15 +27,24 @@ func CreatePemeriksaan(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(requestBody, &pemeriksaan)
 
 	// TODO: Cek penyakit ada nggak
-	// pemeriksaan.Penyakit
+	var penyakit entity.Penyakit
+	key := database.Connector.Where("nama = ?", pemeriksaan.Penyakit).First(&penyakit)
+
+	if key.Error != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	// // kalo ada lanjut ke bawah
 
 	//TODO : Pemeriksaan rantai
-
-	// TODO : Assign Hasil dan tanggal()
-	// pemeriksaan.Hasil =
-	// pemeriksaan.Tanggal = time.Now()
-
+	var cek int = stringMatching.KmpMatch(pemeriksaan.Rantai, penyakit.Rantai)
+	if cek == -1 {
+		pemeriksaan.Hasil = false
+		pemeriksaan.Tanggal = time.Now()
+	} else {
+		pemeriksaan.Hasil = true
+		pemeriksaan.Tanggal = time.Now()
+	}
 	// Penambahan ke database
 	if result := database.Connector.Create(&pemeriksaan); result.Error != nil {
 		w.WriteHeader(http.StatusInternalServerError)
