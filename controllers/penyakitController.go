@@ -12,6 +12,11 @@ import (
 
 //Get All penyakit
 func GetAllPenyakit(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	var penyakits []entity.Penyakit
 	database.Connector.Find(&penyakits)
 	w.Header().Set("Content-Type", "application/json")
@@ -21,6 +26,11 @@ func GetAllPenyakit(w http.ResponseWriter, r *http.Request) {
 
 //GetPenyakitByName return penyakit with specific name
 func GetPenyakitByNama(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	vars := mux.Vars(r)
 	key := vars["nama"]
 
@@ -36,6 +46,11 @@ func GetPenyakitByNama(w http.ResponseWriter, r *http.Request) {
 
 // CreatePenyakit creates penyakit
 func CreatePenyakit(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	requestBody, _ := ioutil.ReadAll(r.Body)
 	var penyakit entity.Penyakit
 	json.Unmarshal(requestBody, &penyakit)
@@ -52,6 +67,11 @@ func CreatePenyakit(w http.ResponseWriter, r *http.Request) {
 
 //UpdatePenyakitByNama updates penyakit with respective nama
 func UpdatePenyakitByNama(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	requestBody, _ := ioutil.ReadAll(r.Body)
 	var penyakit entity.Penyakit
 	json.Unmarshal(requestBody, &penyakit)
@@ -67,6 +87,11 @@ func UpdatePenyakitByNama(w http.ResponseWriter, r *http.Request) {
 
 //DeletePenyakitByNama delete's penyakit with specific nama
 func DeletePenyakitByNama(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	vars := mux.Vars(r)
 	key := vars["nama"]
 

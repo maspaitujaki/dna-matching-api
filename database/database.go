@@ -11,6 +11,6 @@ type Config struct {
 }
 
 var GetConnectionString = func(config Config) string {
-	connectionString := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=require TimeZone=Asia/Shanghai", config.Host, config.User, config.Password, config.Name, config.Port)
+	connectionString := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", config.Host, config.User, config.Password, config.Name, config.Port)
 	return connectionString
 }
