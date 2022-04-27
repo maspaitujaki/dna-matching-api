@@ -12,6 +12,11 @@ import (
 
 // GetAllPemeriksaan returns all pemeriksaan
 func GetAllPemeriksaan(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	var pemeriksaans []entity.Pemeriksaan
 	database.Connector.Find(&pemeriksaans)
 	w.Header().Set("Content-Type", "application/json")
@@ -21,6 +26,11 @@ func GetAllPemeriksaan(w http.ResponseWriter, r *http.Request) {
 
 // CreatePemeriksaan creates pemeriksaan
 func CreatePemeriksaan(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	// TODO : Implement CreatePemeriksaan dengan KMP dan Boyer-Moore
 	requestBody, _ := ioutil.ReadAll(r.Body)
 	var pemeriksaan entity.Pemeriksaan
