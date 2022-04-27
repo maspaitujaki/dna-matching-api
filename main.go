@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	// "github.com/joho/godotenv"
 )
 
 func main() {
@@ -34,6 +35,7 @@ func initaliseHandlers(router *mux.Router) {
 
 	router.HandleFunc("/pemeriksaan/get", controllers.GetAllPemeriksaan).Methods("GET")
 	router.HandleFunc("/pemeriksaan/create", controllers.CreatePemeriksaan).Methods("POST")
+	router.HandleFunc("/pemeriksaan/delete/{id}", controllers.DeletePemeriksaan).Methods("DELETE")
 }
 
 func initDB() {
