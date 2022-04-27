@@ -9,6 +9,8 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -21,7 +23,14 @@ func main() {
 	if port == "" {
 		port = "9000" // Default port if not specified
 	}
-	log.Fatal(http.ListenAndServe(":"+port, router))
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowCredentials: true,
+	})
+
+	handler := c.Handler(router)
+	log.Fatal(http.ListenAndServe(":"+port, handler))
 
 }
 
@@ -37,10 +46,10 @@ func initaliseHandlers(router *mux.Router) {
 }
 
 func initDB() {
-	// errEnv := godotenv.Load()
-	// if errEnv != nil {
-	// 	panic("Error loading .env file")
-	// }
+	errEnv := godotenv.Load()
+	if errEnv != nil {
+		panic("Error loading .env file")
+	}
 	config :=
 		database.Config{
 			User:     os.Getenv("DB_USER"),
