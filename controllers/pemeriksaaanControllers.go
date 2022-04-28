@@ -17,11 +17,11 @@ import (
 func GetAllPemeriksaan(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	var pemeriksaans []entity.Pemeriksaan
 	database.Connector.Find(&pemeriksaans)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(pemeriksaans)
@@ -46,7 +46,6 @@ func DeletePemeriksaan(w http.ResponseWriter, r *http.Request) {
 func CreatePemeriksaan(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	// TODO : Implement CreatePemeriksaan dengan KMP dan Boyer-Moore
@@ -90,7 +89,6 @@ func CreatePemeriksaan(w http.ResponseWriter, r *http.Request) {
 func GetPemeriksaanByPenyakit(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	var pemeriksaans []entity.Pemeriksaan
@@ -104,28 +102,51 @@ func GetPemeriksaanByPenyakit(w http.ResponseWriter, r *http.Request) {
 func GetPemeriksaanByTanggal(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	var pemeriksaans []entity.Pemeriksaan
 	tanggal := r.URL.Query().Get("tanggal")
-	database.Connector.Where("tanggal = ?", tanggal).Find(&pemeriksaans)
+	start, _ := time.Parse("2006-01-02", tanggal)
+	end, _ := time.Parse("2006-01-02", tanggal)
+	end = end.AddDate(0, 0, 1)
+	database.Connector.Find(&pemeriksaans)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(pemeriksaans)
+	json.NewEncoder(w).Encode(PemeriksaanToday(pemeriksaans, start, end))
+}
+
+func PemeriksaanToday(temp []entity.Pemeriksaan, start time.Time, end time.Time) []entity.Pemeriksaan {
+	var pemeriksaans []entity.Pemeriksaan
+	for x := 0; x < len(temp); x++ {
+		if temp[x].Tanggal.After(start) && temp[x].Tanggal.Before(end) {
+			pemeriksaans = append(pemeriksaans, temp[x])
+		}
+	}
+
+	return pemeriksaans
 }
 
 func GetPemeriksaanByPenyakitAndTanggal(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	var pemeriksaans []entity.Pemeriksaan
 	penyakit := r.URL.Query().Get("penyakit")
 	tanggal := r.URL.Query().Get("tanggal")
-	database.Connector.Where("penyakit = ? AND tanggal = ?", penyakit, tanggal).Find(&pemeriksaans)
+	start, _ := time.Parse("2006-01-02", tanggal)
+	end, _ := time.Parse("2006-01-02", tanggal)
+	end = end.AddDate(0, 0, 1)
+
+	result := database.Connector.Where("penyakit = ?", penyakit).Find(&pemeriksaans)
+
+	if result.Error != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(pemeriksaans)
+	json.NewEncoder(w).Encode(PemeriksaanToday(pemeriksaans, start, end))
 }
