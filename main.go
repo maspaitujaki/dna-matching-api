@@ -24,7 +24,7 @@ func main() {
 	}
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowedOrigins:   []string{"http://localhost:8080", "https://awokwok-dna-matching.herokuapp.com"},
 		AllowCredentials: true,
 	})
 
